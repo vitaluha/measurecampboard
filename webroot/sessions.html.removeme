@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-45052109-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-45052109-1');
+  </script>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+  <title>Columbus Measure Camp Sessions</title>
+  <link rel="stylesheet" type="text/css" href="libs/semantic/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="sessions.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script src="libs/jquery-3.1.1.min.js" ></script>
+  <script src="libs/semantic/semantic.min.js"></script>
+  <script src="loadSessions.js"></script>
+  <!--https://github.com/nwcell/ics.js-->
+  <script src="scripts/ics.deps.min.js"></script>
+  <script src="scripts/ics.js"></script>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRSFFB"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WRSFFB');</script>
+  <!-- End Google Tag Manager -->
+
+  <div class="header" w3-include-html="sessions-header.html"></div>
+  <div class="links-dropdown" w3-include-html="links.html"></div>
+
+  <div id='demo' class='session-list'></div>
+
+  <!--<button class="ui basic button built-by">
+    Built by Vitaliy Matiyash
+  </button>-->
+
+  <div id="filterHeader" class="sticky">
+    <div id='rooms' class='session-rooms'></div>
+    <div id='times' class='session-times'></div>
+  </div>
+
+  <script src='scripts/tabletop.min.js'></script>
+  <script src='includeHTML.js'></script>
+  <script type='text/javascript'>
+    var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/19NhwtckaO9KfabuFPX9vlcNEnjOUXVy1OAq9kJgA5Rk/edit?usp=sharing';
+    var sessions = {};
+    function init() {
+      showInfo();
+      Tabletop.init( { key: publicSpreadsheetUrl,
+        callback: showInfo,
+        simpleSheet: true
+      });
+    }
+    function showInfo(data, tabletop) {
+      sessions = data;
+      buildRooms('five');
+      loadCards(sessions);
+      buildSessionTimes(sessions);
+    }
+    function buildTags(tags) {
+      var arr = tags.split(',');
+      var html = '';
+      for (x in arr) {
+        html += '<div class="ui mini basic label">' +  arr[x] + '</div>';
+      }
+      return html;
+    }
+    function buildRooms(roomCount) {
+      var divs = `<div class="ui ${roomCount} labels session-rooms">`;
+      var colors = [{
+      	"color": "all",
+      	"sponsor": "all"
+      }, {
+      	"color": "red",
+      	"sponsor": "Tealium"
+      }, {
+      	"color": "orange",
+      	"sponsor": "Search Discovery"
+      }, {
+      	"color": "yellow",
+      	"sponsor": "Wittenberg University"
+      }, {
+      	"color": "green",
+      	"sponsor": "TalentID Group"
+      }, {
+      	"color": "blue",
+      	"sponsor": "Delaware room"
+      }];
+      if (roomCount == 'five') {
+        for (var x in colors) {
+          var color = colors[x].color,
+            sponsor = colors[x].sponsor;
+          divs +=
+            `<div data-id="${color}" class="ui ${color} label session-room" onclick="filterByRoomColor('${color}')">
+              ${sponsor}
+            </div>`;
+        }
+      }
+      divs += '</div>';
+      document.getElementById("rooms").innerHTML = divs;
+    }
+    function filterByRoomColor(room_color) {
+      data = sessions.filter(function(d) {
+        if (room_color == 'all') {
+          return true;
+        }
+        return d.room_color == room_color;
+      });
+      loadCards(data);
+    }
+    window.addEventListener('DOMContentLoaded', init)
+  </script>
+
+  <script>
+    includeHTML();
+  </script>
+</body>
+</html>
