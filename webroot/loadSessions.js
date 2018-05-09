@@ -2,6 +2,7 @@ function loadCards(data) {
   if (!data) {
     return;
   }
+  var i = 0;
   divs = `<div class="ui five stackable cards">`;
   for (x in data) {
     var session = data[x];
@@ -29,15 +30,21 @@ function loadCards(data) {
     var dataId = x;
     var tagsHtml = buildTags(tags);
     // TODO: refactor into more modular/readable code
+    var sessionSelect = '';
+    var cardSaved = localStorage.getItem('card' + i);
+    if (cardSaved === 'true' || cardSaved === true) {
+      sessionSelect = 'session-select';
+    }
+    session['session-select'] = cardSaved;
     if (description === '&#160;') {
       divs += `
-        <div class="card ${dataId}" data-id="${dataId}">
-          <a class="ui ${room_color} right corner label">
-            <i title="Add to Calendar" class="plus icon add-to-call" onclick="addToCall(${dataId})"></i>
-          </a>
+        <div class="card ${dataId} ${sessionSelect}" data-id="${dataId}">
           <div class="content">
             <h5 class="ui ${room_color} header">
               <span class="session-time-header">${time}</span>
+              <span class="heart-right">
+                <i title="Add to Calendar" class="${room_color} heart outline icon add-to-call" onclick="addToCall(${dataId})"></i>
+              </span>
             </h5>
             <h4 style="text-align: center;">No Session</h4>
           </div>
@@ -57,7 +64,7 @@ function loadCards(data) {
       `;
     } else {
       divs += `
-        <div class="card ${dataId}" data-id="${dataId}">
+        <div class="card ${dataId} ${sessionSelect}" data-id="${dataId}">
           <div class="content">
             <h5 class="ui ${room_color} header">
               <span class="session-time-header">${time}</span>
@@ -95,6 +102,7 @@ function loadCards(data) {
         </div>
       `;
     }
+    i++;
 
   }
 
@@ -107,9 +115,32 @@ function loadCards(data) {
     </button>
     `;
   document.getElementById("demo").innerHTML = divs;
-
-
   // $('.calendar.plus.outline.icon.right.floated')
+}
+
+function loadToastrNotif() {
+  loadToastrOptions();
+  toastr["info"]("Session 1 is now at 12:20pm", "Session time changed!");
+  toastr["info"]("Session 1 is now at 11:45pm", "Session time changed!");
+}
+function loadToastrOptions() {
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-center",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "0",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
 }
 
 
@@ -129,6 +160,41 @@ function buildSessionTimes(data) {
 
   document.getElementById("times").innerHTML = divs;
 }
+function buildSessionFavs() {
+  var divs = `
+    <button class="ui toggle button center floated" onclick="filterBySessionFav(this)">
+      <i title="Show My Sessions" class="heart icon"></i>My Sessions
+    </button>
+  `;
+
+  /*var divs = `<div class="ui buttons">`;
+  divs += `<div class="ui button active" onclick="filterBySessionFav('all')">All</div>`;
+  divs += `<div class="ui button" onclick="filterBySessionFav('fav')">Fav</div>`;
+  divs += '</div>';*/
+
+  document.getElementById("favs").innerHTML = divs;
+}
+
+function filterBySessionFav(fav) {
+  if (fav.innerHTML == 'All') {
+    // Show ALL sessions
+    data = sessions.filter(function(d, i) {
+      fav.innerHTML = '<i title="Show My Sessions" class="heart icon"></i>My Sessions';
+      return true;
+    });
+    loadCards(data);
+  } else {
+    data = sessions.filter(function(d, i) {
+      // Show only 'Fav' sessions
+      fav.innerHTML = 'All';
+      return d['session-select'] === 'true' || d['session-select'] === true;
+    });
+    loadCards(data);
+    // Temporary remove 'selected/faved' class
+    $('.card').removeClass('session-select');
+  }
+}
+
 // TODO: handle time little better
 function filterBySessionTime(time) {
   data = sessions.filter(function(d) {
@@ -139,18 +205,23 @@ function filterBySessionTime(time) {
   });
   loadCards(data);
 }
+
 // TODO: rethink 'add-to-calendar feature'
 function addToCall(data) {
-  /*console.log(data)
-  var card = $('.card.'+data);
-  if (!card.hasClass('session-select')) {
-    card.addClass('session-select')
+  console.log(data)
+  // var card = $('.card.'+data);
+  var card = $('.card[data-id="' + data + '"]');
+  if (sessions[data]['session-select'] === 'true' || sessions[data]['session-select'] === true) {
+    sessions[data]['session-select'] = false;
+    card.removeClass('session-select');
+    localStorage.setItem('card'+data, false);
   } else {
-    card.removeClass('session-select')
-  }*/
-
+    sessions[data]['session-select'] = true;
+    card.addClass('session-select');
+    localStorage.setItem('card'+data, true);
+  }
   // OLD: Add to calendar
-  var event = sessions[data];
+  /*var event = sessions[data];
   var description = buildEventDescription(event);
   var begin = '4/28/2018 ' + event.time.split('-')[0].trim();
   var end = '4/28/2018 ' + event.time.split('-')[1].trim();
@@ -159,8 +230,7 @@ function addToCall(data) {
   var cal = new ics();
 
   cal.addEvent(event.title, description, event.room_color + ' room', beginF, endF);
-  cal.download(event.title);
-
+  cal.download(event.title);*/
 }
 
 // TODO: improve event description card

@@ -12,6 +12,9 @@
   <!--https://github.com/nwcell/ics.js-->
   <script src="scripts/ics.deps.min.js"></script>
   <script src="scripts/ics.js"></script>
+
+  <link href="scripts/toastr.css" rel="stylesheet"/>
+  <script src="scripts/toastr.min.js"></script>
 </head>
 <body>
   <div class="header" w3-include-html="sessions-header.html"></div>
@@ -20,7 +23,9 @@
   <div id="filterHeader" class="sticky">
     <div id='rooms' class='session-rooms'></div>
     <div id='times' class='session-times'></div>
+    <div id='favs' class='session-times'></div>
   </div>
+
   <script src='scripts/tabletop.min.js'></script>
   <script src='includeHTML.js'></script>
   <script type='text/javascript'>
@@ -39,7 +44,8 @@
       // TODO: refactor here to handle arbitrary number of rooms
       buildRooms('five');
       loadCards(sessions);
-      buildSessionTimes(sessions);
+      // buildSessionTimes(sessions);
+      buildSessionFavs();
     }
     function buildTags(tags) {
       var arr = tags.split(',');
@@ -93,7 +99,8 @@
       });
       loadCards(data);
     }
-    window.addEventListener('DOMContentLoaded', init)
+    window.addEventListener('DOMContentLoaded', init);
+    loadToastrNotif();
   </script>
 
   <script>

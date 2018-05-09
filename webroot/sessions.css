@@ -15,6 +15,12 @@
 .measure-camp-logo {
   height: 75px;
   display: inherit;
+  width: 100px;
+  margin: 0 auto;
+}
+.measure-camp-logo:hover {
+  opacity: 0.8;
+  background: #3b3b3b;
 }
 
 /* Main session list */
