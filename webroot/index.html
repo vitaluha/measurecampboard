@@ -40,12 +40,21 @@
       });
     }
     function showInfo(data, tabletop) {
+      if (data === undefined) {
+        return;
+      }
+
+      data.forEach(function(d, i) {
+        // Index every data row
+        d['data-id'] = i;
+      });
       sessions = data;
       // TODO: refactor here to handle arbitrary number of rooms
       buildRooms('five');
       loadCards(sessions);
       // buildSessionTimes(sessions);
       buildSessionFavs();
+      search_sessions();
     }
     function buildTags(tags) {
       var arr = tags.split(',');
@@ -90,17 +99,9 @@
       divs += '</div>';
       document.getElementById("rooms").innerHTML = divs;
     }
-    function filterByRoomColor(room_color) {
-      data = sessions.filter(function(d) {
-        if (room_color == 'all') {
-          return true;
-        }
-        return d.room_color == room_color;
-      });
-      loadCards(data);
-    }
+
     window.addEventListener('DOMContentLoaded', init);
-    loadToastrNotif();
+    // loadToastrNotif();
   </script>
 
   <script>

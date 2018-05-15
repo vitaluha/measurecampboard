@@ -2,7 +2,6 @@ function loadCards(data) {
   if (!data) {
     return;
   }
-  var i = 0;
   divs = `<div class="ui five stackable cards">`;
   for (x in data) {
     var session = data[x];
@@ -27,11 +26,12 @@ function loadCards(data) {
         '<i title="Whiteboard only" class="large clipboard outline icon"></i>',
       capacity = session.capacity ? session.capacity : 'N/A';
     var jsonSession = JSON.stringify(session).toString();
-    var dataId = x;
+    var dataId = session['data-id'];
+    // console.log(session['data-id'])
     var tagsHtml = buildTags(tags);
     // TODO: refactor into more modular/readable code
     var sessionSelect = '';
-    var cardSaved = localStorage.getItem('card' + i);
+    var cardSaved = localStorage.getItem('card' + dataId);
     if (cardSaved === 'true' || cardSaved === true) {
       sessionSelect = 'session-select';
     }
@@ -102,8 +102,6 @@ function loadCards(data) {
         </div>
       `;
     }
-    i++;
-
   }
 
   divs += `</div>`;
@@ -165,6 +163,10 @@ function buildSessionFavs() {
     <button class="ui toggle button center floated" onclick="filterBySessionFav(this)">
       <i title="Show My Sessions" class="heart icon"></i>My Sessions
     </button>
+    <div class="ui icon input">
+      <input type="text" placeholder="Search..." id="search_sessions">
+      <i class="search icon"></i>
+    </div>
   `;
 
   /*var divs = `<div class="ui buttons">`;
@@ -202,6 +204,16 @@ function filterBySessionTime(time) {
       return true;
     }
     return d.time.replace(/am/ig, '').replace(/pm/ig, '').trim() == time.replace(/am/ig, '').replace(/pm/ig, '').trim();
+  });
+  loadCards(data);
+}
+
+function filterByRoomColor(room_color) {
+  data = sessions.filter(function(d) {
+    if (room_color == 'all') {
+      return true;
+    }
+    return d.room_color == room_color;
   });
   loadCards(data);
 }
@@ -246,4 +258,41 @@ function buildEventDescription(data) {
     Room: ${room_color}\\n
   `
   return desc;
+}
+
+function search_sessions() {
+  // console.log('search_sessions')
+  $('#search_sessions').keyup(function(d) {
+    var searchText = this.value;
+    // if user types in 3 characters or more - match on 'description', 'title', 'speaker'
+    //   to filter out correct events
+    if (searchText && searchText.length > 0) {
+      var trimmedText = searchText.trim().toLowerCase();
+      data = sessions.filter(function(e) {
+        console.log(e)
+        return e.description.toLowerCase().indexOf(trimmedText) > -1 ||
+          e.title.toLowerCase().indexOf(trimmedText) > -1 ||
+          e.tags.toLowerCase().indexOf(trimmedText) > -1 ||
+          e.speaker.toLowerCase().indexOf(trimmedText) > -1;
+      });
+      loadCards(data);
+      highlight(trimmedText)
+      // $('.description').highlight(trimmedText);
+    } else {
+      loadCards(sessions); // return all events
+
+    }
+  });
+}
+
+function highlight(text) {
+  var src_str = $("#demo").html();
+  var term = text;
+  term = term.replace(/(\s+)/,"(<[^>]+>)*$1(<[^>]+>)*");
+  var pattern = new RegExp("("+term+")", "gi");
+
+  src_str = src_str.replace(pattern, "<mark>$1</mark>");
+  src_str = src_str.replace(/(<mark>[^<>]*)((<[^>]+>)+)([^<>]*<\/mark>)/,"$1</mark>$2<mark>$4");
+
+  $("#demo").html(src_str);
 }
