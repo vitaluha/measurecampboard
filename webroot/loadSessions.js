@@ -31,6 +31,7 @@ function loadCards(data) {
     var tagsHtml = buildTags(tags);
     // TODO: refactor into more modular/readable code
     var sessionSelect = '';
+    var outline = 'outline';
     var cardSaved = localStorage.getItem('card' + dataId);
     if (cardSaved === 'true' || cardSaved === true) {
       sessionSelect = 'session-select';
@@ -43,7 +44,7 @@ function loadCards(data) {
             <h5 class="ui ${room_color} header">
               <span class="session-time-header">${time}</span>
               <span class="heart-right">
-                <i title="Add to Calendar" class="${room_color} heart outline icon add-to-call" onclick="addToCall(${dataId})"></i>
+                <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall(${dataId}, this)"></i>
               </span>
             </h5>
             <h4 style="text-align: center;">No Session</h4>
@@ -72,7 +73,7 @@ function loadCards(data) {
                 ${speaker}
               </div>
               <span class="heart-right">
-                <i title="Add to Calendar" class="${room_color} heart outline icon add-to-call" onclick="addToCall(${dataId})"></i>
+                <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall(${dataId}, this)"></i>
               </span>
             </h5>
             <div class="left aligned card-header">
@@ -219,17 +220,19 @@ function filterByRoomColor(room_color) {
 }
 
 // TODO: rethink 'add-to-calendar feature'
-function addToCall(data) {
+function addToCall(data, heart) {
   console.log(data)
   // var card = $('.card.'+data);
   var card = $('.card[data-id="' + data + '"]');
   if (sessions[data]['session-select'] === 'true' || sessions[data]['session-select'] === true) {
     sessions[data]['session-select'] = false;
     card.removeClass('session-select');
+    heart.classList.add("outline");
     localStorage.setItem('card'+data, false);
   } else {
     sessions[data]['session-select'] = true;
     card.addClass('session-select');
+    heart.classList.remove("outline");
     localStorage.setItem('card'+data, true);
   }
   // OLD: Add to calendar
