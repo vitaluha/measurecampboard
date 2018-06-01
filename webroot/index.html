@@ -6,6 +6,10 @@
   <link rel="stylesheet" type="text/css" href="libs/semantic/semantic.min.css">
   <link rel="stylesheet" type="text/css" href="sessions.css">
   <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- Board Options -->
+  <script src="board-config.js"></script>
+
   <script src="libs/jquery-3.1.1.min.js" ></script>
   <script src="libs/semantic/semantic.min.js"></script>
   <script src="loadSessions.js"></script>
@@ -30,7 +34,10 @@
   <script src='includeHTML.js'></script>
   <script type='text/javascript'>
     //  TODO: Insert link to your Google Sheet below
-    var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/19NhwtckaO9KfabuFPX9vlcNEnjOUXVy1OAq9kJgA5Rk/edit?usp=sharing';
+    // var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/19NhwtckaO9KfabuFPX9vlcNEnjOUXVy1OAq9kJgA5Rk/edit?usp=sharing';
+
+    var publicSpreadsheetUrl = gOptions.enabled ? gOptions.google_sheet_url : '';
+
     var sessions = {};
     function init() {
       showInfo();
@@ -50,7 +57,8 @@
       });
       sessions = data;
       // TODO: refactor here to handle arbitrary number of rooms
-      buildRooms('five');
+      var roomCount = gOptions.enabled ? gOptions.room_count : 'five'; // Five rooms by default, unless specified in `board-config.js` file
+      buildRooms(roomCount);
       loadCards(sessions);
       // buildSessionTimes(sessions);
       buildSessionFavs();
@@ -66,7 +74,10 @@
     }
     // TODO: refactor here, to handle any room color/name/sponsor
     function buildRooms(roomCount) {
+      
       var divs = `<div class="ui ${roomCount} labels session-rooms">`;
+      // var colors = getSponsors(sessions);
+      // console.log(colors)
       var colors = [{
       	"color": "all",
       	"sponsor": "all"
@@ -86,16 +97,16 @@
       	"color": "blue",
       	"sponsor": "Delaware room"
       }];
-      if (roomCount == 'five') {
-        for (var x in colors) {
-          var color = colors[x].color,
-            sponsor = colors[x].sponsor;
-          divs +=
-            `<div data-id="${color}" class="ui ${color} label session-room" onclick="filterByRoomColor('${color}')">
-              ${sponsor}
-            </div>`;
-        }
+      
+      for (var x in colors) {
+        var color = colors[x].color,
+          sponsor = colors[x].sponsor;
+        divs +=
+          `<div data-id="${color}" class="ui ${color} label session-room" onclick="filterByRoomColor('${color}')">
+            ${sponsor}
+          </div>`;
       }
+      
       divs += '</div>';
       document.getElementById("rooms").innerHTML = divs;
     }

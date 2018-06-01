@@ -269,14 +269,14 @@ function search_sessions() {
     if (searchText && searchText.length > 0) {
       var trimmedText = searchText.trim().toLowerCase();
       data = sessions.filter(function(e) {
-        console.log(e)
+        // console.log(e)
         return e.description.toLowerCase().indexOf(trimmedText) > -1 ||
           e.title.toLowerCase().indexOf(trimmedText) > -1 ||
           e.tags.toLowerCase().indexOf(trimmedText) > -1 ||
           e.speaker.toLowerCase().indexOf(trimmedText) > -1;
       });
       loadCards(data);
-      highlight(trimmedText)
+      // highlight(trimmedText)
       // $('.description').highlight(trimmedText);
     } else {
       loadCards(sessions); // return all events
@@ -285,6 +285,7 @@ function search_sessions() {
   });
 }
 
+// TODO: fix this method. it highlights text that is being searched
 function highlight(text) {
   var src_str = $("#demo").html();
   var term = text;
@@ -295,4 +296,25 @@ function highlight(text) {
   src_str = src_str.replace(/(<mark>[^<>]*)((<[^>]+>)+)([^<>]*<\/mark>)/,"$1</mark>$2<mark>$4");
 
   $("#demo").html(src_str);
+}
+
+function getSponsors(data) {
+  
+  this.colors = [];
+  this.colors.push({
+    "color": "all",
+    "sponsor": "all"
+  });
+  data.forEach(function(d) {
+    var newColor = {
+      "color": d.room_color,
+      "sponsor": d.room_sponsor
+    };
+
+    // TODO: add only unique room/sponsor values
+
+  });
+  console.log(this.colors)
+  return this.colors;
+
 }

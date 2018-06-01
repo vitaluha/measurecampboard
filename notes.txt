@@ -1,0 +1,2 @@
+How to read a properties file in javascript from project directory?
+    https://stackoverflow.com/questions/19310951/how-to-read-a-properties-file-in-javascript-from-project-directory/19352069#19352069
