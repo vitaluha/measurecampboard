@@ -72,32 +72,11 @@
       }
       return html;
     }
-    // TODO: refactor here, to handle any room color/name/sponsor
-    function buildRooms(roomCount) {
-      
+
+    function buildRooms(roomCount) {      
       var divs = `<div class="ui ${roomCount} labels session-rooms">`;
-      // var colors = getSponsors(sessions);
-      // console.log(colors)
-      var colors = [{
-      	"color": "all",
-      	"sponsor": "all"
-      }, {
-      	"color": "red",
-      	"sponsor": "Tealium"
-      }, {
-      	"color": "orange",
-      	"sponsor": "Search Discovery"
-      }, {
-      	"color": "yellow",
-      	"sponsor": "Wittenberg University"
-      }, {
-      	"color": "green",
-      	"sponsor": "TalentID Group"
-      }, {
-      	"color": "blue",
-      	"sponsor": "Delaware room"
-      }];
-      
+      var colors = getSponsors(sessions);
+
       for (var x in colors) {
         var color = colors[x].color,
           sponsor = colors[x].sponsor;

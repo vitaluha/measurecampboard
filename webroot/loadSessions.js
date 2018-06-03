@@ -298,23 +298,29 @@ function highlight(text) {
   $("#demo").html(src_str);
 }
 
+// TODO: refactor this to be more efficient
 function getSponsors(data) {
-  
+  // create array of unique color/sponsor combo
+
+  this.values = []
+
   this.colors = [];
-  this.colors.push({
+  this.sponsors = []
+
+  this.values.push({
     "color": "all",
     "sponsor": "all"
   });
   data.forEach(function(d) {
-    var newColor = {
-      "color": d.room_color,
-      "sponsor": d.room_sponsor
-    };
-
-    // TODO: add only unique room/sponsor values
-
+    if (this.colors.indexOf(d.room_color) === -1 && 
+      this.sponsors.indexOf(d.room_sponsor) === -1) {
+      this.colors.push(d.room_color);
+      this.sponsors.push(d.room_sponsor);
+      this.values.push({
+        color: d.room_color,
+        sponsor: d.room_sponsor
+      });
+    }
   });
-  console.log(this.colors)
-  return this.colors;
-
+  return this.values;
 }
