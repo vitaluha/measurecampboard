@@ -27,10 +27,10 @@ function loadCards(data) {
       capacity = session.capacity ? session.capacity : 'N/A';
     var jsonSession = JSON.stringify(session).toString();
     var dataId = session['data-id'];
-    // console.log(session['data-id'])
     var tagsHtml = buildTags(tags);
     // TODO: refactor into more modular/readable code
     var sessionSelect = '';
+    var outline = 'outline';
     var cardSaved = localStorage.getItem('card' + dataId);
     if (cardSaved === 'true' || cardSaved === true) {
       sessionSelect = 'session-select';
@@ -43,7 +43,7 @@ function loadCards(data) {
             <h5 class="ui ${room_color} header">
               <span class="session-time-header">${time}</span>
               <span class="heart-right">
-                <i title="Add to Calendar" class="${room_color} heart outline icon add-to-call" onclick="addToCall(${dataId})"></i>
+                <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall(${dataId}, this)"></i>
               </span>
             </h5>
             <h4 style="text-align: center;">No Session</h4>
@@ -72,7 +72,7 @@ function loadCards(data) {
                 ${speaker}
               </div>
               <span class="heart-right">
-                <i title="Add to Calendar" class="${room_color} heart outline icon add-to-call" onclick="addToCall(${dataId})"></i>
+                <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall(${dataId}, this)"></i>
               </span>
             </h5>
             <div class="left aligned card-header">
@@ -178,6 +178,7 @@ function buildSessionFavs() {
 }
 
 function filterBySessionFav(fav) {
+  $('#search_sessions').val('');
   if (fav.innerHTML == 'All') {
     // Show ALL sessions
     data = sessions.filter(function(d, i) {
@@ -199,6 +200,7 @@ function filterBySessionFav(fav) {
 
 // TODO: handle time little better
 function filterBySessionTime(time) {
+  $('#search_sessions').val('');
   data = sessions.filter(function(d) {
     if (time == 'all') {
       return true;
@@ -209,6 +211,7 @@ function filterBySessionTime(time) {
 }
 
 function filterByRoomColor(room_color) {
+  $('#search_sessions').val('');
   data = sessions.filter(function(d) {
     if (room_color == 'all') {
       return true;
@@ -219,17 +222,19 @@ function filterByRoomColor(room_color) {
 }
 
 // TODO: rethink 'add-to-calendar feature'
-function addToCall(data) {
+function addToCall(data, heart) {
   console.log(data)
   // var card = $('.card.'+data);
   var card = $('.card[data-id="' + data + '"]');
   if (sessions[data]['session-select'] === 'true' || sessions[data]['session-select'] === true) {
     sessions[data]['session-select'] = false;
     card.removeClass('session-select');
+    heart.classList.add("outline");
     localStorage.setItem('card'+data, false);
   } else {
     sessions[data]['session-select'] = true;
     card.addClass('session-select');
+    heart.classList.remove("outline");
     localStorage.setItem('card'+data, true);
   }
   // OLD: Add to calendar
@@ -261,7 +266,6 @@ function buildEventDescription(data) {
 }
 
 function search_sessions() {
-  // console.log('search_sessions')
   $('#search_sessions').keyup(function(d) {
     var searchText = this.value;
     // if user types in 3 characters or more - match on 'description', 'title', 'speaker'
@@ -269,7 +273,6 @@ function search_sessions() {
     if (searchText && searchText.length > 0) {
       var trimmedText = searchText.trim().toLowerCase();
       data = sessions.filter(function(e) {
-        // console.log(e)
         return e.description.toLowerCase().indexOf(trimmedText) > -1 ||
           e.title.toLowerCase().indexOf(trimmedText) > -1 ||
           e.tags.toLowerCase().indexOf(trimmedText) > -1 ||
