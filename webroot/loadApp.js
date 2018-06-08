@@ -27,7 +27,7 @@ function showInfo(data, tabletop) {
 
   // main function to build session cards
   loadCards(sessions);
-  
+
   // buildSessionTimes(sessions);
   buildSessionFavs();
   search_sessions();
@@ -41,7 +41,7 @@ function buildTags(tags) {
   return html;
 }
 
-function buildRooms(roomCount) {      
+function buildRooms(roomCount) {
   var divs = `<div class="ui ${roomCount} labels session-rooms">`;
   var colors = getSponsors(sessions);
 
@@ -53,11 +53,10 @@ function buildRooms(roomCount) {
     ${sponsor}
     </div>`;
   }
-  
+
   divs += '</div>';
   document.getElementById("rooms").innerHTML = divs;
 }
 
 window.addEventListener('DOMContentLoaded', init);
-// loadToastrNotif();  
-
+// loadToastrNotif();

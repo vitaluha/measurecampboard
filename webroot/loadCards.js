@@ -116,3 +116,27 @@ function loadCards(data) {
   document.getElementById("demo").innerHTML = divs;
   // $('.calendar.plus.outline.icon.right.floated')
 }
+
+// Build links in top left dropdown menu
+// This reads from `gOptions.links` array
+function getLinks() {
+  var div = '';
+  div += `
+  <div class="ui simple dropdown">
+    <div class="text">Links</div>
+    <i class="dropdown icon"></i>
+    <div class="menu">
+  `;
+  if (gOptions.enabled) {
+    for (var link in gOptions.links) {
+      var item = gOptions.links[link];
+      div += `
+        <a class="item" target="_blank" title="${item.title}" href="${item.href}">
+          ${item.text}
+        </a>
+      `;
+    }
+  }
+  div += `</div></div>`;
+  document.getElementById("linksDropdown").innerHTML = div;
+}

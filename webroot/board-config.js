@@ -38,5 +38,22 @@ gOptions = {
       "sponsor": "Sponsor 4",
       "room_capacity": 50
     }
+  ],
+  links: [
+    {
+      text: '#MeasureCampSF',
+      title: '#MeasureCampSF',
+      href: 'https://twitter.com/hashtag/MeasureCampSF?src=hash'
+    },
+    {
+      text: 'New Tweet',
+      title: 'New Tweet',
+      href: 'http://twitter.com/intent/tweet?hashtags=MeasureCampSF'
+    },
+    {
+      text: 'Floor Plan',
+      title: 'Floor Plan',
+      href: 'images/Fawcett Floorplan Oct17.pdf'
+    }
   ]
 }
