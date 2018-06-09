@@ -48,10 +48,11 @@ function buildRooms(roomCount) {
   for (var x in colors) {
     var color = colors[x].color,
     sponsor = colors[x].sponsor;
-    divs +=
-    `<div data-id="${color}" class="ui ${color} label session-room" onclick="filterByRoomColor('${color}')">
-    ${sponsor}
-    </div>`;
+    divs += `
+      <div data-id="${color}" class="ui ${color} label session-room" onclick="filterByRoomColor('${color}')">
+        ${sponsor}
+      </div>
+    `;
   }
 
   divs += '</div>';

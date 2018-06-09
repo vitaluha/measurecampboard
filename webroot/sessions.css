@@ -1,3 +1,6 @@
+html {
+  overflow-x: hidden;
+}
 .measure-camp-header {
   text-align: center;
   background: linear-gradient(to bottom, #373737 0%, #1b1b1b 100%);
@@ -60,6 +63,17 @@
 .session-times {
   text-align: center;
 }
+
+.session-times.favs {
+  padding-bottom: 5px;
+}
+.session-times.favs .session-favs {
+  width: 140px;
+}
+.session-times.favs .session-search {
+  width: calc(100% - 175px);
+}
+
 .session-time {
   padding: 0.4em 0.4em !important;
 }

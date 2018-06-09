@@ -51,10 +51,10 @@ function buildSessionTimes(data) {
 }
 function buildSessionFavs() {
   var divs = `
-    <button class="ui toggle button center floated" onclick="filterBySessionFav(this)">
+    <button class="ui toggle button center floated session-favs" onclick="filterBySessionFav(this)">
       <i title="Show My Sessions" class="heart icon"></i>My Sessions
     </button>
-    <div class="ui icon input">
+    <div class="ui icon input session-search">
       <input type="text" placeholder="Search..." id="search_sessions">
       <i class="search icon"></i>
     </div>
