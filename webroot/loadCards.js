@@ -63,6 +63,35 @@ function loadCards(data) {
           </div>
         </div>
       `;
+    } else if (room_color == 'custom') { // if `room_color` == custom - this is custom card (for example happy hour, lunch, etc)
+      // divs += buildCustomCard();
+      divs += `
+        <div class="card ${dataId} ${sessionSelect} full-width-card" data-id="${dataId}">
+          <div class="content">
+            <h5 class="ui ${room_color} header">
+              <span class="session-time-header">${time}</span>
+            </h5>
+            <div class="left aligned card-header">
+              ${title}
+            </div>
+            <div class="description">
+              ${description}
+            </div>
+          </div>
+          <div class="extra content">
+            <div class="ui mini labels session-tags">
+              ${tagsHtml}
+            </div>
+            <div title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
+              ${capacity}
+              <i class="icon users"></i>
+            </div>
+            <div class="ui ${room_color} basic  circular label">
+              ${room_sponsor}
+            </div>
+          </div>
+        </div>
+      `;
     } else {
       divs += `
         <div class="card ${dataId} ${sessionSelect}" data-id="${dataId}">

@@ -1,5 +1,29 @@
-function buildSingleCard() {
-
+function buildCustomCard() {
+  return `
+    <div class="card ${dataId} ${sessionSelect}" data-id="${dataId}">
+      <div class="content">
+        <h5 class="ui ${room_color} header">
+          <span class="session-time-header">${time}</span>
+          <span class="heart-right">
+            <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall(${dataId}, this)"></i>
+          </span>
+        </h5>
+        <h4 style="text-align: center;">No Session</h4>
+      </div>
+      <div class="extra content">
+        <div class="ui mini labels session-tags">
+          ${tagsHtml}
+        </div>
+        <div title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
+          ${capacity}
+          <i class="icon users"></i>
+        </div>
+        <div class="ui ${room_color} basic  circular label">
+          ${room_sponsor}
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 /*function buildSingleEmptyCard(this) {
