@@ -57,7 +57,7 @@ function loadCards(data) {
               ${capacity}
               <i class="icon users"></i>
             </div>
-            <div class="ui ${room_color} basic  circular label">
+            <div class="ui ${room_color} basic circular label">
               ${room_sponsor}
             </div>
           </div>
@@ -126,8 +126,9 @@ function loadCards(data) {
               <i class="icon users"></i>
             </div>
             <div class="ui ${room_color} basic  circular label">
-              ${room_sponsor}
+               ${room_sponsor}
             </div>
+            <img src="${image}" class="ui fluid image"></img>
           </div>
         </div>
       `;
