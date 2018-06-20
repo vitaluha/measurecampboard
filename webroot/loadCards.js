@@ -18,6 +18,7 @@ function loadCards(data) {
         twitter :
         session.speaker ? session.speaker : '<i title="Anonymous Coward" class="user secret icon"></i>',
       tags = session.tags ? session.tags : 'N/A',
+      image = session.image ? session.image : '',
       focus = session.focus === 'B' ? 'Business'   : session.focus === 'T' ? 'Technical' : '&#160;',
       level = session.level === 'N' ? 'Beginner'   : session.level ===  'A' ? 'Advanced' : '&#160;',
       type = session.type === 'P' ? 'Presentation' : session.type === 'D' ? 'Discussion' : '&#160;',
