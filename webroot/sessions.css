@@ -3,7 +3,8 @@ html {
 }
 .measure-camp-header {
   text-align: center;
-  background: linear-gradient(to bottom, #373737 0%, #1b1b1b 100%);
+  /*background: linear-gradient(to bottom, #373737 0%, #1b1b1b 100%);*/
+  background: #a43e41;
 }
 .measure-camp-header h3 {
   color: lighten(#DFD7C4,5%);
@@ -138,7 +139,8 @@ html {
 }
 .session-select {
   /* border: 2px solid red !important; */
-  box-shadow: 0px 0px 6px 2px #f00 !important;
+  /*box-shadow: 0px 0px 6px 2px #a43e41 !important;*/
+  border: 1px solid #a43e41 !important;
 }
 
 
@@ -155,7 +157,8 @@ html {
 
 .full-width-card {
   width: 100% !important;
-  box-shadow: 0px 0px 6px 2px #f00 !important;
+  /*box-shadow: 0px 0px 6px 2px #a43e41 !important;*/
+  border: 1px solid #a43e41 !important;
 }
 .full-width-card .header {
   text-align: center;

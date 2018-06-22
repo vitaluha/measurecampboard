@@ -35,6 +35,7 @@ function loadCards(data) {
     var cardSaved = localStorage.getItem('card' + dataId);
     if (cardSaved === 'true' || cardSaved === true) {
       sessionSelect = 'session-select';
+      outline = '';
     }
     session['session-select'] = cardSaved;
     if (description === '&#160;') {
