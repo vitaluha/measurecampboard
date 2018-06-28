@@ -10,27 +10,35 @@ function init() {
     callback: showInfo,
     simpleSheet: true
   });
+
 }
 function showInfo(data, tabletop) {
   if (data === undefined) {
     return;
   }
+  var cards = tabletop.sheets('Data').elements;
 
-  data.forEach(function(d, i) {
+  cards.forEach(function(d, i) {
     // Index every data row
     d['data-id'] = i;
   });
-  sessions = data;
+  sessions = cards;
+
+  // numToWords();
+
   // TODO: refactor here to handle arbitrary number of rooms
-  var roomCount = gOptions.enabled ? gOptions.room_count : 'five'; // Five rooms by default, unless specified in `board-config.js` file
-  buildRooms(roomCount);
+  var roomCount = getRoomCount(sessions);
 
+  // buildRooms(roomCount)
   // main function to build session cards
-  loadCards(sessions);
-
-  // buildSessionTimes(sessions);
+  loadCards(sessions, toWords(roomCount));
+  buildSessionTimes(sessions);
   buildSessionFavs();
   search_sessions();
+
+  var settings = tabletop.sheets('Settings').elements;
+  loadLinks(settings);
+  loadSponsors(settings);
 }
 function buildTags(tags) {
   var arr = tags.split(',');

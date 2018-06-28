@@ -51,11 +51,26 @@ function buildCustomCard() {
         </div>
       </div>
     </div>
-  `;  
+  `;
 }*/
 
 
-
+function getRoomCount(data) {
+  if (!data) {
+    return 0;
+  }
+  var uniqueRooms = data.map(function(d) {
+    if (d.room_color !== '' && d.room_color !== 'custom') {
+      return d.room_color/* !== '' && d.room_color !== 'custom'*/;
+    }
+  });
+  var rooms = new Set(uniqueRooms);
+  rooms.delete(undefined);
+  rooms.delete(null);
+  // debugger;
+  var roomCount = rooms.size;
+  return roomCount;
+}
 
 function buildSessionTimes(data) {
   if (!data) {
@@ -66,6 +81,7 @@ function buildSessionTimes(data) {
   });
   var times = new Set(allTimes);
   var divs = `<div class="ui labels">`;
+  divs += `<div class="ui grey basic tiny label session-time" onclick="filterBySessionTime('all')">All</div>`;
   times.forEach(function(d) {
     divs += `<div class="ui grey basic tiny label session-time" onclick="filterBySessionTime('${d}')">${d}</div>`;
   });
@@ -178,18 +194,15 @@ function highlight(text) {
 // TODO: refactor this to be more efficient
 function getSponsors(data) {
   // create array of unique color/sponsor combo
-
   this.values = []
-
   this.colors = [];
   this.sponsors = []
-
   this.values.push({
     "color": "all",
     "sponsor": "all"
   });
   data.forEach(function(d) {
-    if (this.colors.indexOf(d.room_color) === -1 && 
+    if (this.colors.indexOf(d.room_color) === -1 &&
       this.sponsors.indexOf(d.room_sponsor) === -1) {
       this.colors.push(d.room_color);
       this.sponsors.push(d.room_sponsor);

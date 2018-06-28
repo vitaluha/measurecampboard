@@ -1,11 +1,14 @@
-function loadCards(data) {
+function loadCards(data, roomCount) {
   if (!data) {
     return;
   }
-  divs = `<div class="ui five stackable cards">`;
+  divs = `<div class="ui ${roomCount} stackable cards">`;
   for (x in data) {
     var session = data[x];
-    var room_color = session.room_color ? session.room_color : '&#160;',
+    if (session.room_color === '') {
+      continue;
+    }
+    var room_color = session.room_color ? session.room_color : '', // '&#160;',
       room_sponsor = session.room_sponsor ? session.room_sponsor : '&#160;',
       time = session.time ? session.time.replace(/am/ig, '').replace(/pm/ig, '').trim() : '&#160;',
       title = session.title ? session.title : '&#160;',
@@ -26,6 +29,7 @@ function loadCards(data) {
         '<i title="Audio/Video" class="large file audio outline icon"></i>' :
         '<i title="Whiteboard only" class="large clipboard outline icon"></i>',
       capacity = session.capacity ? session.capacity : 'N/A';
+
     var jsonSession = JSON.stringify(session).toString();
     var dataId = session['data-id'];
     var tagsHtml = buildTags(tags);
@@ -62,10 +66,12 @@ function loadCards(data) {
             <div class="ui ${room_color} basic circular label">
               ${room_sponsor}
             </div>
+            <img class="ui fluid image" src="${image}"/>
           </div>
         </div>
       `;
     } else if (room_color == 'custom') { // if `room_color` == custom - this is custom card (for example happy hour, lunch, etc)
+      // this card is full width
       // divs += buildCustomCard();
       divs += `
         <div class="card ${dataId} ${sessionSelect} full-width-card" data-id="${dataId}">
@@ -91,6 +97,7 @@ function loadCards(data) {
             <div class="ui ${room_color} basic  circular label">
               ${room_sponsor}
             </div>
+            <img class="ui fluid image" src="${image}"/>
           </div>
         </div>
       `;
@@ -130,7 +137,7 @@ function loadCards(data) {
             <div class="ui ${room_color} basic  circular label">
                ${room_sponsor}
             </div>
-            <img src="${image}" class="ui fluid image"></img>
+            <img class="ui fluid image" src="${image}"/>
           </div>
         </div>
       `;
@@ -150,8 +157,8 @@ function loadCards(data) {
 }
 
 // Build links in top left dropdown menu
-// This reads from `gOptions.links` array
-function getLinks() {
+// This reads from `Settings` Google Sheet
+function loadLinks(links) {
   var div = '';
   div += `
   <div class="ui simple dropdown">
@@ -159,16 +166,38 @@ function getLinks() {
     <i class="dropdown icon"></i>
     <div class="menu">
   `;
-  if (gOptions.enabled) {
-    for (var link in gOptions.links) {
-      var item = gOptions.links[link];
-      div += `
-        <a class="item" target="_blank" title="${item.title}" href="${item.href}">
-          ${item.text}
-        </a>
-      `;
+    for (var link in links) {
+      var item = links[link];
+      if (item.name === 'Menu Item') {
+        div += `
+          <a class="item" target="_blank" title="${item.value}" href="${item.href}">
+            ${item.value}
+          </a>
+        `;
+      }
     }
-  }
   div += `</div></div>`;
   document.getElementById("linksDropdown").innerHTML = div;
+}
+
+function loadSponsors(links) {
+  var div = '';
+  div += `
+  <div class="ui simple dropdown">
+    <div class="text">Sponsors</div>
+    <i class="dropdown icon"></i>
+    <div class="menu">
+  `;
+    for (var link in links) {
+      var item = links[link];
+      if (item.name === 'Sponsor') {
+        div += `
+          <a class="item" target="_blank" title="${item.value}" href="${item.href}">
+            ${item.value}
+          </a>
+        `;
+      }
+    }
+  div += `</div></div>`;
+  document.getElementById("sponsorsDropdown").innerHTML = div;
 }
