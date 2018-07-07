@@ -22,9 +22,9 @@ function loadCards(data, roomCount) {
         session.speaker ? session.speaker : '<i title="Anonymous Coward" class="user secret icon"></i>',
       tags = session.tags ? session.tags : 'N/A',
       image = session.image ? session.image : '',
-      focus = session.focus === 'B' ? 'Business'   : session.focus === 'T' ? 'Technical' : '&#160;',
-      level = session.level === 'N' ? 'Beginner'   : session.level ===  'A' ? 'Advanced' : '&#160;',
-      type = session.type === 'P' ? 'Presentation' : session.type === 'D' ? 'Discussion' : '&#160;',
+      focus = session.focus ? session.focus : '&#160;',
+      level = session.level ? session.level : '&#160;',
+      type = session.type ? session.type : '&#160;',
       av = session.av === 'AV' ?
         '<i title="Audio/Video" class="large file audio outline icon"></i>' :
         '<i title="Whiteboard only" class="large clipboard outline icon"></i>',
@@ -42,7 +42,7 @@ function loadCards(data, roomCount) {
       outline = '';
     }
     session['session-select'] = cardSaved;
-    if (description === '&#160;') {
+    if (description === '&#160;' && room_color !== 'custom') {
       // divs += buildSingleEmptyCard(this);
       divs += `
         <div class="card ${dataId} ${sessionSelect}" data-id="${dataId}">
@@ -70,7 +70,7 @@ function loadCards(data, roomCount) {
           </div>
         </div>
       `;
-    } else if (room_color == 'custom') { // if `room_color` == custom - this is custom card (for example happy hour, lunch, etc)
+    } else if (room_color === 'custom') { // if `room_color` == custom - this is custom card (for example happy hour, lunch, etc)
       // this card is full width
       // divs += buildCustomCard();
       divs += `
@@ -117,9 +117,9 @@ function loadCards(data, roomCount) {
             <div class="left aligned card-header">
               ${title}
             </div>
-            <span class="tag-labels">${level} | </span>
-            <span class="tag-labels">${focus} | </span>
-            <span class="tag-labels">${type}</span>
+            <span class="ui basic tiny label">${level}</span>
+            <span class="ui basic tiny label">${focus}</span>
+            <span class="ui basic tiny label">${type}</span>
 
             <div class="description">
               ${description}
@@ -154,6 +154,11 @@ function loadCards(data, roomCount) {
     `;
   document.getElementById("demo").innerHTML = divs;
   // $('.calendar.plus.outline.icon.right.floated')
+
+  // trigger dropdown loading
+  setTimeout(function() {
+    $('.ui.dropdown').dropdown();
+  }, 500)
 }
 
 // Build links in top left dropdown menu
@@ -186,7 +191,7 @@ function loadSponsors(links) {
   <div class="ui simple dropdown">
     <div class="text">Sponsors</div>
     <i class="dropdown icon"></i>
-    <div class="menu">
+    <div class="left menu">
   `;
     for (var link in links) {
       var item = links[link];

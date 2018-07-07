@@ -72,7 +72,7 @@ function getRoomCount(data) {
   return roomCount;
 }
 
-function buildSessionTimes(data) {
+/*function buildSessionTimes(data) {
   if (!data) {
     return;
   }
@@ -88,12 +88,38 @@ function buildSessionTimes(data) {
   divs += '</div>';
 
   document.getElementById("times").innerHTML = divs;
+}*/
+function getSessionTimes() {
+  var allTimes = sessions.map(function(d) {
+    return(d.time.replace(/am/ig, '').replace(/pm/ig, '').trim())
+  });
+  var times = new Set(allTimes);
+  return times;
 }
 function buildSessionFavs() {
+  var sessionTimes =  getSessionTimes();
+
+  var timesItems = '';
+  sessionTimes.forEach(function(d) {
+    timesItems += `<a class="item" onclick="filterBySessionTime('${d}')">${d}</a>`;
+  });
+
+  // ui red basic bottom left pointing dropdown button
+
   var divs = `
-    <button class="ui toggle button center floated session-favs" onclick="filterBySessionFav(this)">
-      <i title="Show My Sessions" class="heart icon"></i>My Sessions
+    <button class="ui red basic button session-favs" onclick="filterBySessionFav(this)">
+      <i title="Show My Sessions" class="heart icon"></i><span class="mc-label-value">My Sessions</span>
     </button>
+
+
+    <div class="ui red basic bottom left pointing dropdown button session-time-filter">
+      <i class="clock icon"></i>
+      <div class="text"><span class="mc-label-value">Times</div></span>
+      <div class="menu">` +
+        timesItems +
+      `</div>
+    </div>
+
     <div class="ui icon input session-search">
       <input type="text" placeholder="Search..." id="search_sessions">
       <i class="search icon"></i>
@@ -112,7 +138,6 @@ function buildSessionFavs() {
 
 // TODO: rethink 'add-to-calendar feature'
 function addToCall(data, heart) {
-  console.log(data)
   // var card = $('.card.'+data);
   var card = $('.card[data-id="' + data + '"]');
   if (sessions[data]['session-select'] === 'true' || sessions[data]['session-select'] === true) {

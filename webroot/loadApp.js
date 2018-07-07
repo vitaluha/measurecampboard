@@ -32,7 +32,7 @@ function showInfo(data, tabletop) {
   // buildRooms(roomCount)
   // main function to build session cards
   loadCards(sessions, toWords(roomCount));
-  buildSessionTimes(sessions);
+  // buildSessionTimes(sessions);
   buildSessionFavs();
   search_sessions();
 
