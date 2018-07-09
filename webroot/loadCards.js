@@ -2,6 +2,9 @@ function loadCards(data, roomCount) {
   if (!data) {
     return;
   }
+  if (roomCount === undefined) {
+    roomCount = toWords(getRoomCount(data));
+  }
   divs = `<div class="ui ${roomCount} stackable cards">`;
   for (x in data) {
     var session = data[x];
@@ -45,12 +48,12 @@ function loadCards(data, roomCount) {
     if (description === '&#160;' && room_color !== 'custom') {
       // divs += buildSingleEmptyCard(this);
       divs += `
-        <div class="card ${dataId} ${sessionSelect}" data-id="${dataId}">
+        <div class="card ${sessionSelect}" data-id="${dataId}">
           <div class="content">
             <h5 class="ui ${room_color} header">
               <span class="session-time-header">${time}</span>
               <span class="heart-right">
-                <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall(${dataId}, this)"></i>
+                <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall('${dataId}', this)"></i>
               </span>
             </h5>
             <h4 style="text-align: center;">No Session</h4>
@@ -111,7 +114,7 @@ function loadCards(data, roomCount) {
                 ${speaker}
               </div>
               <span class="heart-right">
-                <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall(${dataId}, this)"></i>
+                <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall('${dataId}', this)"></i>
               </span>
             </h5>
             <div class="left aligned card-header">
@@ -205,4 +208,26 @@ function loadSponsors(links) {
     }
   div += `</div></div>`;
   document.getElementById("sponsorsDropdown").innerHTML = div;
+}
+
+function loadLogo(links) {
+  var logo = '',
+    logoHref = '',
+    logoTitle = '';
+
+  for (var link in links) {
+    var item = links[link];
+    if (item.name === 'Logo') {
+      logo = item.href;
+    }
+    if (item.name === 'City') {
+      logoHref = item.href;
+      logoTitle = item.value;
+    }
+  }
+  $('#measureCampLogo').attr('src', logo);
+  $('#measureCampLogo').attr('style', 'display: inherit')
+
+  $('#measureCampLogoLink').attr('href', logoHref);
+  $('#measureCampLogoLink').attr('title', logoTitle);
 }

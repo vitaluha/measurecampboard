@@ -6,7 +6,7 @@ function filterBySessionFav(fav) {
       fav.innerHTML = '<i title="Show My Sessions" class="heart icon"></i><span class="mc-label-value">My Sessions</span>';
       return true;
     });
-    loadCards(data);
+    loadCards(sessions);
   } else {
     data = sessions.filter(function(d, i) {
       // Show only 'Fav' sessions

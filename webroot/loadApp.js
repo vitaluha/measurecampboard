@@ -18,9 +18,10 @@ function showInfo(data, tabletop) {
   }
   var cards = tabletop.sheets('Data').elements;
 
+  // TODO: remove this, and read from `session_id` property directly
   cards.forEach(function(d, i) {
     // Index every data row
-    d['data-id'] = i;
+    d['data-id'] = d['session_id'];
   });
   sessions = cards;
 
@@ -39,6 +40,7 @@ function showInfo(data, tabletop) {
   var settings = tabletop.sheets('Settings').elements;
   loadLinks(settings);
   loadSponsors(settings);
+  loadLogo(settings);
 }
 function buildTags(tags) {
   var arr = tags.split(',');

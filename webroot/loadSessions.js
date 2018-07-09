@@ -5,7 +5,7 @@ function buildCustomCard() {
         <h5 class="ui ${room_color} header">
           <span class="session-time-header">${time}</span>
           <span class="heart-right">
-            <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall(${dataId}, this)"></i>
+            <i title="Add to Calendar" class="${room_color} heart ${outline} icon add-to-call" onclick="addToCall('${dataId}', this)"></i>
           </span>
         </h5>
         <h4 style="text-align: center;">No Session</h4>
@@ -99,7 +99,7 @@ function getSessionTimes() {
 function buildSessionFavs() {
   var sessionTimes =  getSessionTimes();
 
-  var timesItems = '';
+  var timesItems = `<a class="item" onclick="filterBySessionTime('all')">All</a>`;
   sessionTimes.forEach(function(d) {
     timesItems += `<a class="item" onclick="filterBySessionTime('${d}')">${d}</a>`;
   });
@@ -140,19 +140,25 @@ function buildSessionFavs() {
 function addToCall(data, heart) {
   // var card = $('.card.'+data);
   var card = $('.card[data-id="' + data + '"]');
-  if (sessions[data]['session-select'] === 'true' || sessions[data]['session-select'] === true) {
-    sessions[data]['session-select'] = false;
+
+  var sessionItemIndex = sessions.findIndex(function(d){
+  	return d['data-id'] === data
+  });
+  var sessionItem = sessions[sessionItemIndex];
+
+  if (sessionItem['session-select'] === 'true' || sessionItem['session-select'] === true) {
+    sessionItem['session-select'] = false;
     card.removeClass('session-select');
     heart.classList.add("outline");
     localStorage.setItem('card'+data, false);
   } else {
-    sessions[data]['session-select'] = true;
+    sessionItem['session-select'] = true;
     card.addClass('session-select');
     heart.classList.remove("outline");
     localStorage.setItem('card'+data, true);
   }
   // OLD: Add to calendar
-  /*var event = sessions[data];
+  /*var event = sessionItem;
   var description = buildEventDescription(event);
   var begin = '4/28/2018 ' + event.time.split('-')[0].trim();
   var end = '4/28/2018 ' + event.time.split('-')[1].trim();

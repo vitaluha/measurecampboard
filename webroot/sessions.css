@@ -176,6 +176,12 @@ html {
 /*#a43e41*/
 
 @media only screen and (max-width: 600px) {
+  .ui.stackable.cards>.card {
+    margin: 0.5em 1em !important;
+  }
+  .content, .extra-content {
+    padding: 0.5em !important;
+  }
   .session-list {
     padding-left: 0px;
     padding-right: 0px;
