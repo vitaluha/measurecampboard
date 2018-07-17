@@ -16,13 +16,15 @@
   <script src="scripts/ics.js"></script>
   <link href="scripts/toastr.css" rel="stylesheet"/>
   <script src="scripts/toastr.min.js"></script>
+  <script src="scripts/moment.js"></script>
 </head>
 
 <body>
-  <div class="header" w3-include-html="sessions-header.html"></div>
-  <!--<div class="links-dropdown" w3-include-html="links.html"></div>-->
+  <div class="header" w3-include-html="sessions-header.html">
+  </div>
   <div id="linksDropdown" class="links-dropdown" ></div>
   <div id="sponsorsDropdown" class="sponsors-dropdown" ></div>
+  
   <div id='demo' class='session-list'></div>
   <div id="filterHeader" class="sticky">
     <div id='rooms' class='session-rooms'></div>

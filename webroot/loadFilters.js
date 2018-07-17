@@ -38,7 +38,6 @@ function filterBySessionTime(time) {
   x.removeClass('grey')
   // x.removeClass('basic')
   x.addClass('red')
-  // debugger;
   // x.css('background', 'red !important')
 }
 

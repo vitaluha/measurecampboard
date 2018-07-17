@@ -11,16 +11,16 @@ function buildCustomCard() {
         <h4 style="text-align: center;">No Session</h4>
       </div>
       <div class="extra content">
-        <div class="ui mini labels session-tags">
+        <span class="ui ${room_color} basic  circular label">
+          ${room_sponsor}
+        </span>
+        <span class="ui mini labels session-tags">
           ${tagsHtml}
-        </div>
-        <div title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
+        </span>
+        <span title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
           ${capacity}
           <i class="icon users"></i>
-        </div>
-        <div class="ui ${room_color} basic  circular label">
-          ${room_sponsor}
-        </div>
+        </span>
       </div>
     </div>
   `;
@@ -108,9 +108,14 @@ function buildSessionFavs() {
 
   var divs = `
     <button class="ui red basic button session-favs" onclick="filterBySessionFav(this)">
-      <i title="Show My Sessions" class="heart icon"></i><span class="mc-label-value">My Sessions</span>
+      <i title="Show My Sessions" class="heart icon"></i>
+      <span class="mc-label-value">My Sessions</span>
     </button>
 
+    <button class="ui red basic button hide-past" onclick="showHideCurrentSessions()">
+      <i title="Hide Past Sessions" class="hourglass icon"></i>
+      <span class="mc-label-value past-sessions">Hide Past Sessions</span>
+    </button>
 
     <div class="ui red basic bottom left pointing dropdown button session-time-filter">
       <i class="clock icon"></i>

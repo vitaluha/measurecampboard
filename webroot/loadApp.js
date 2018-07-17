@@ -46,7 +46,7 @@ function buildTags(tags) {
   var arr = tags.split(',');
   var html = '';
   for (x in arr) {
-    html += '<div class="ui mini basic label">' +  arr[x] + '</div>';
+    html += '<span class="ui mini basic label">' +  arr[x] + '</span>';
   }
   return html;
 }

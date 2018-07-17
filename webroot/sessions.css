@@ -1,9 +1,18 @@
 html {
   overflow-x: hidden;
 }
+/* .header {
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  z-index: 2;
+} */
 .ui.card, .ui.cards>.card {
   box-shadow: 0 1px 3px 0 #ECEDEE, 0 0 0 1px #ECEDEE;
   border: 1px solid transparent;
+}
+.ui.card>.content>.header, .ui.cards>.card>.content>.header {
+  margin: 0;
 }
 .measure-camp-header {
   text-align: center;
@@ -42,6 +51,7 @@ html {
 .card-header {
   font-weight: bold;
   background: #ecedee;
+  padding: 5px;
 }
 .session-speaker a {
   /* opacity: 1 !important; */
@@ -129,12 +139,14 @@ html {
   top: 28px;
   left: 20px;
   color: white;
+  /* z-index: 2; */
 }
 .sponsors-dropdown {
   position: absolute !important;
   top: 28px;
   left: 100px;
   color: white;
+  /* z-index: 2; */
 }
 .tag-labels {
   color: #aaa;
@@ -174,11 +186,18 @@ html {
   padding: 5px;
 }
 /*#a43e41*/
+.card.finished{
+  /* opacity: 0.7; */
+}
 
 @media only screen and (max-width: 600px) {
   .ui.stackable.cards>.card {
     margin: 0.5em 1em !important;
   }
+  /* .card-header {
+    padding: 2px;
+    line-height: 14px;
+  } */
   .content, .extra-content {
     padding: 0.5em !important;
   }
@@ -189,7 +208,8 @@ html {
   .session-times .icon {
     margin: 0 !important;
   }
-  .session-times .session-favs, .session-times .session-time-filter {
+  .session-times .session-favs, .session-times .session-time-filter,
+  .session-times .hide-past {
     padding-left: 10px;
     padding-right: 10px;
   }

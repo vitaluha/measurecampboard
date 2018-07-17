@@ -31,7 +31,8 @@ function loadCards(data, roomCount) {
       av = session.av === 'AV' ?
         '<i title="Audio/Video" class="large file audio outline icon"></i>' :
         '<i title="Whiteboard only" class="large clipboard outline icon"></i>',
-      capacity = session.capacity ? session.capacity : 'N/A';
+      capacity = session.capacity ? session.capacity : 'N/A',
+      isFinished = getIsFinished(session.time) ? "finished" : "";
 
     var jsonSession = JSON.stringify(session).toString();
     var dataId = session['data-id'];
@@ -45,10 +46,11 @@ function loadCards(data, roomCount) {
       outline = '';
     }
     session['session-select'] = cardSaved;
+    /*<img class="ui fluid image" src="${image}"/>*/
     if (description === '&#160;' && room_color !== 'custom') {
       // divs += buildSingleEmptyCard(this);
       divs += `
-        <div class="card ${sessionSelect}" data-id="${dataId}">
+        <div class="card ${isFinished} ${sessionSelect}" data-id="${dataId}">
           <div class="content">
             <h5 class="ui ${room_color} header">
               <span class="session-time-header">${time}</span>
@@ -59,17 +61,16 @@ function loadCards(data, roomCount) {
             <h4 style="text-align: center;">No Session</h4>
           </div>
           <div class="extra content">
-            <div class="ui mini labels session-tags">
+            <span class="ui ${room_color} basic circular label">
+              ${room_sponsor}
+            </span>
+            <span class="ui mini labels session-tags">
               ${tagsHtml}
-            </div>
-            <div title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
+            </span>
+            <span title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
               ${capacity}
               <i class="icon users"></i>
-            </div>
-            <div class="ui ${room_color} basic circular label">
-              ${room_sponsor}
-            </div>
-            <img class="ui fluid image" src="${image}"/>
+            </span>
           </div>
         </div>
       `;
@@ -77,7 +78,7 @@ function loadCards(data, roomCount) {
       // this card is full width
       // divs += buildCustomCard();
       divs += `
-        <div class="card ${dataId} ${sessionSelect} full-width-card" data-id="${dataId}">
+        <div class="card ${isFinished} ${dataId} ${sessionSelect} full-width-card" data-id="${dataId}">
           <div class="content">
             <h5 class="ui ${room_color} header">
               <span class="session-time-header">${time}</span>
@@ -90,23 +91,22 @@ function loadCards(data, roomCount) {
             </div>
           </div>
           <div class="extra content">
-            <div class="ui mini labels session-tags">
+            <span class="ui ${room_color} basic  circular label">
+              ${room_sponsor}
+            </span>
+            <span class="ui mini labels session-tags">
               ${tagsHtml}
-            </div>
-            <div title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
+            </span>
+            <span title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
               ${capacity}
               <i class="icon users"></i>
-            </div>
-            <div class="ui ${room_color} basic  circular label">
-              ${room_sponsor}
-            </div>
-            <img class="ui fluid image" src="${image}"/>
+            </span>
           </div>
         </div>
       `;
     } else {
       divs += `
-        <div class="card ${dataId} ${sessionSelect}" data-id="${dataId}">
+        <div class="card ${isFinished} ${dataId} ${sessionSelect}" data-id="${dataId}">
           <div class="content">
             <h5 class="ui ${room_color} header">
               <span class="session-time-header">${time}</span>
@@ -130,17 +130,16 @@ function loadCards(data, roomCount) {
 
           </div>
           <div class="extra content">
-            <div class="ui mini labels session-tags">
+            <span class="ui ${room_color} basic  circular label">
+            ${room_sponsor}
+            </span>
+            <span class="ui mini labels session-tags">
               ${tagsHtml}
-            </div>
-            <div title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
+            </span>
+            <span title="Room Capacity: ${capacity}" class="ui circular basic  label no-border">
               ${capacity}
               <i class="icon users"></i>
-            </div>
-            <div class="ui ${room_color} basic  circular label">
-               ${room_sponsor}
-            </div>
-            <img class="ui fluid image" src="${image}"/>
+            </span>
           </div>
         </div>
       `;
@@ -158,10 +157,48 @@ function loadCards(data, roomCount) {
   document.getElementById("demo").innerHTML = divs;
   // $('.calendar.plus.outline.icon.right.floated')
 
+  // scrollToCurrentSession();
+  // showHideCurrentSessions();
+
   // trigger dropdown loading
   setTimeout(function() {
     $('.ui.dropdown').dropdown();
+    setPastSessionsStatus();
   }, 500)
+}
+
+function setPastSessionsStatus() {
+  var sessionsHidden = localStorage.getItem('pastSessionsHidden');
+  if (sessionsHidden === 'true' || sessionsHidden === true) {
+    $('.past-sessions').text('Hide Past Sessions');
+  } else {
+    $('.past-sessions').text('Show Past Sessions');
+  }
+  showHideCurrentSessions();
+}
+
+function scrollToCurrentSession() {
+  // $('.card').not('.finished').first()
+  $('html, body').animate({
+      scrollTop: $('.card').not('.finished').first().offset().top - 5
+  }, 650);
+}
+
+function showHideCurrentSessions() {
+  var label = $('.past-sessions').text(),
+    newLabel = '';
+  if (label === 'Hide Past Sessions') {
+    newLabel = 'Show Past Sessions';
+    // $('.card.finished').hide();
+    $('.card.finished').attr('style', 'display: none !important;')
+    localStorage.setItem('pastSessionsHidden', true);
+  } else {
+    newLabel = 'Hide Past Sessions';
+    // $('.card.finished').show();
+    $('.card.finished').attr('style', 'display: block;')
+    localStorage.setItem('pastSessionsHidden', false);
+  }
+  $('.past-sessions').text(newLabel);
 }
 
 // Build links in top left dropdown menu
@@ -230,4 +267,10 @@ function loadLogo(links) {
 
   $('#measureCampLogoLink').attr('href', logoHref);
   $('#measureCampLogoLink').attr('title', logoTitle);
+}
+
+function getIsFinished(time) {
+  var endTime = time.split('-')[1].trim();
+  var currentTime = moment().format("h:mma");
+  return moment(endTime, "h:mma").isBefore();
 }
