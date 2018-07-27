@@ -52,6 +52,7 @@ html {
   font-weight: bold;
   background: #ecedee;
   padding: 5px;
+  margin-bottom: 2px;
 }
 .session-speaker a {
   /* opacity: 1 !important; */
@@ -174,6 +175,7 @@ html {
 }
 .full-width-card .header {
   text-align: center;
+  padding-bottom: 5px;
 }
 .full-width-card .card-header {
   background: #a43e41;
